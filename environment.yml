@@ -1,0 +1,13 @@
+name : goban-size-recognition-tool
+channels :
+  - defaults
+  - https://conda.anaconda.org/menpo
+  - pytorch
+  - bioconda/label/cf201901
+  - biobuilds
+  - yuxiang
+  - conda-forge
+  - bioconda
+dependencies :
+- pip :
+  - keras==3.8.0

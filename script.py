@@ -3,6 +3,7 @@
 import os
 from PIL import Image
 from random import randint
+import keras
 
 # declare lists to contain images
 pics_19x19 = []
@@ -56,6 +57,8 @@ for pic_9x9 in pics_9x9:
 # let's display some images
 x_train[0].show()
 x_test[0].show()
+
+x = keras.utils.img_to_array(x_test[0])
 
 
 
