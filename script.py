@@ -17,10 +17,14 @@ for filename in os.listdir('./pictures/19x19'):
     pics_19x19.append(my_image)
 
 for filename in os.listdir('./pictures/13x13'):
-    pics_13x13.append(Image.open('./pictures/13x13/'+filename))
+    my_image = Image.open('./pictures/13x13/'+filename)
+    my_image = my_image.resize((200,200))
+    pics_13x13.append(my_image)
 
 for filename in os.listdir('./pictures/9x9'):
-    pics_9x9.append(Image.open('./pictures/9x9/'+filename))
+    my_image = Image.open('./pictures/9x9/'+filename)
+    my_image = my_image.resize((200,200))
+    pics_9x9.append(my_image)
 
 # create empty train and test sets
 x_train, y_train, x_test, y_test = [],[],[],[]
