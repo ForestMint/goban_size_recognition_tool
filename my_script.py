@@ -1,8 +1,5 @@
 
-print("Hello World!")
-
-## import dependancies
-
+## ------------------- IMPORT PACKAGES ----------------------------------------
 import os
 # this command makes that the Tensorlow warning is not written in console
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
@@ -11,8 +8,7 @@ from random import randint
 import keras
 import tensorflow as tf
 import numpy as np
-
-print('Hello World!')
+from numpy import asarray
 
 
 ## declare lists to contain images
@@ -23,18 +19,49 @@ pics_9x9 = []
 ## fill the lists with images from the folders
 for filename in os.listdir('./pictures/19x19'):
     my_image = Image.open('./pictures/19x19/'+filename)
+    my_image = my_image.convert('1') 
     my_image = my_image.resize((25,25))
-    pics_19x19.append(my_image)
+    numpydata = asarray(my_image)
+    #print(numpydata.shape)
+    pics_19x19.append(numpydata)
 
 for filename in os.listdir('./pictures/13x13'):
     my_image = Image.open('./pictures/13x13/'+filename)
+    my_image = my_image.convert('1') 
     my_image = my_image.resize((25,25))
-    pics_13x13.append(my_image)
+    numpydata = asarray(my_image)
+    #print(numpydata.shape)
+    pics_13x13.append(numpydata)
 
 for filename in os.listdir('./pictures/9x9'):
     my_image = Image.open('./pictures/9x9/'+filename)
+    my_image = my_image.convert('1') 
     my_image = my_image.resize((25,25))
-    pics_9x9.append(my_image)
+    numpydata = asarray(my_image)
+    print(type(numpydata))
+    print(numpydata.shape)
+    pics_9x9.append(numpydata)
+
+
+nd_array_19x19 = np.zeros(shape=(len(pics_19x19), 25, 25))
+nd_array_13x13 = np.zeros(shape=(len(pics_13x13), 25, 25))
+nd_array_9x9 = np.zeros(shape=(len(pics_9x9), 25, 25))
+
+for counter in range(len(pics_19x19)):
+    nd_array_19x19[counter] = pics_19x19[counter]
+
+for counter in range(len(pics_13x13)):
+    nd_array_13x13[counter] = pics_13x13[counter]
+
+for counter in range(len(pics_9x9)):
+    nd_array_9x9[counter] = pics_9x9[counter]
+
+'''
+print(nd_array_19x19.shape)
+print(nd_array_13x13.shape)
+print(nd_array_9x9.shape)
+'''
+
 
 ## create empty train and test sets
 x_train, y_train, x_test, y_test = [],[],[],[]
@@ -42,7 +69,7 @@ x_train, y_train, x_test, y_test = [],[],[],[]
 
 ## for every image in each of the 3 lists, it will be sorted randomly to either
 ## the train set or the test set
-for pic_19x19 in pics_19x19:
+for pic_19x19 in nd_array_19x19:
     res=randint(0,100)
     if res<80:
         x_train.append(pic_19x19)
@@ -51,7 +78,7 @@ for pic_19x19 in pics_19x19:
         x_test.append(pic_19x19)
         y_test.append("19x19")
 
-for pic_13x13 in pics_13x13:
+for pic_13x13 in nd_array_13x13:
     res=randint(0,100)
     if res<80:
         x_train.append(pic_13x13)
@@ -60,7 +87,7 @@ for pic_13x13 in pics_13x13:
         x_test.append(pic_13x13)
         y_test.append("13x13")
 
-for pic_9x9 in pics_9x9:
+for pic_9x9 in nd_array_9x9:
     res=randint(0,100)
     if res<80:
         x_train.append(pic_9x9)
@@ -96,6 +123,7 @@ print(x)
 '''
 
 print(train_images.shape)
+
 
 
 model = tf.keras.Sequential([
