@@ -38,14 +38,14 @@ for filename in os.listdir('./pictures/9x9'):
     my_image = my_image.convert('1') 
     my_image = my_image.resize((25,25))
     numpydata = asarray(my_image)
-    print(type(numpydata))
-    print(numpydata.shape)
+    #print(type(numpydata))
+    #print(numpydata.shape)
     pics_9x9.append(numpydata)
-
 
 nd_array_19x19 = np.zeros(shape=(len(pics_19x19), 25, 25))
 nd_array_13x13 = np.zeros(shape=(len(pics_13x13), 25, 25))
 nd_array_9x9 = np.zeros(shape=(len(pics_9x9), 25, 25))
+
 
 for counter in range(len(pics_19x19)):
     nd_array_19x19[counter] = pics_19x19[counter]
@@ -97,6 +97,7 @@ for pic_9x9 in nd_array_9x9:
         y_test.append("9x9")
 
 
+
 '''
 print(y_train)
 print(y_test)
@@ -108,21 +109,35 @@ x_train[0].show()
 x_test[0].show()
 '''
 
-train_images, test_images = [], []
-for image in x_train :
-    train_images.append(keras.utils.img_to_array(x_train[0]))
-for image in x_test :
-    test_images.append(keras.utils.img_to_array(x_test[0]))
+#train_images, test_images = [], []
+
+train_images = np.zeros(shape=(len(x_train), 25, 25))
+test_images = np.zeros(shape=(len(x_test), 25, 25))
+
+
+for counter in range(len(x_train)) :
+    #train_images.append(keras.utils.img_to_array(x_train[0]))
+    train_images [counter] = (x_train[counter])
+for counter in range(len(x_test)) :
+    #test_images.append(keras.utils.img_to_array(x_test[0]))
+    train_images [counter] = (x_test[counter])
+
 
 
 train_labels, test_labels = y_train, y_test
-train_images, test_images = np.array(train_images), np.array(test_images)
+
+
+#train_images, test_images = np.array(train_images), np.array(test_images)
+
+
 '''
 x = keras.utils.img_to_array(x_test[0])
 print(x)
 '''
 
 print(train_images.shape)
+print(test_images.shape)
+
 
 
 
