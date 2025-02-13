@@ -10,6 +10,7 @@ from PIL import Image
 from random import randint
 import keras
 import tensorflow as tf
+import numpy as np
 
 print('Hello World!')
 
@@ -88,12 +89,13 @@ for image in x_test :
 
 
 train_labels, test_labels = y_train, y_test
+train_images, test_images = np.array(train_images), np.array(test_images)
 '''
 x = keras.utils.img_to_array(x_test[0])
 print(x)
 '''
 
-train_images.shape
+print(train_images.shape)
 
 
 model = tf.keras.Sequential([
