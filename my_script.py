@@ -62,11 +62,7 @@ for counter in range(len(pics_13x13)):
 for counter in range(len(pics_9x9)):
     nd_array_9x9[counter] = pics_9x9[counter]
 
-'''
-print(nd_array_19x19.shape)
-print(nd_array_13x13.shape)
-print(nd_array_9x9.shape)
-'''
+
 
 
 ## create empty train and test sets
@@ -104,16 +100,7 @@ for pic_9x9 in nd_array_9x9:
 
 
 
-'''
-print(y_train)
-print(y_test)
-'''
 
-'''
-## let's display some images
-x_train[0].show()
-x_test[0].show()
-'''
 
 #train_images, test_images = [], []
 
