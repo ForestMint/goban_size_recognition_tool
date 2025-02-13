@@ -3,3 +3,9 @@ Thus, when a board is detected by the GoStream app, the right position model (9x
 
 # create Anaconda environment
 $ conda env create -f environment.yml
+
+# activate venv (virtual environment)
+$ source .venv/bin/activate
+$ pip install keras
+$ pip install tensorflow
+$ pip intall Pillow
