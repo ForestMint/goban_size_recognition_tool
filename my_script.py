@@ -146,11 +146,18 @@ test_images = test_images / 255.0
 
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
+test_labels = np.array(test_labels)
+
 
 for counter in range(len(train_labels)):
     train_labels[counter] = labels_dict[train_labels[counter]]
 #train_labels = list(map(int, train_labels))
 train_labels = train_labels.astype(int)
+
+for counter in range(len(test_labels)):
+    test_labels[counter] = labels_dict[test_labels[counter]]
+#train_labels = list(map(int, train_labels))
+test_labels = test_labels.astype(int)
 
 print(train_images.shape)
 print(len(train_labels))
@@ -177,12 +184,14 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
-model.fit(train_images, train_labels, epochs=4)
+model.fit(train_images, train_labels, epochs=10)
 
-'''
+
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 print('\nTest accuracy:', test_acc)
+
+'''
 
 ## make predictions
 probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
