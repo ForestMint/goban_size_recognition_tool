@@ -10,6 +10,9 @@ import tensorflow as tf
 import numpy as np
 from numpy import asarray
 import matplotlib.pyplot as plt
+import configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
 labels_dict = {"19x19": 1, "13x13": 2, "9x9" : 3}
@@ -23,7 +26,7 @@ pics_9x9 = []
 for filename in os.listdir('./pictures/19x19'):
     my_image = Image.open('./pictures/19x19/'+filename)
     my_image = my_image.convert('1') 
-    my_image = my_image.resize((25,25))
+    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
     numpydata = asarray(my_image)
     #print(numpydata.shape)
     pics_19x19.append(numpydata)
@@ -31,7 +34,7 @@ for filename in os.listdir('./pictures/19x19'):
 for filename in os.listdir('./pictures/13x13'):
     my_image = Image.open('./pictures/13x13/'+filename)
     my_image = my_image.convert('1') 
-    my_image = my_image.resize((25,25))
+    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
     numpydata = asarray(my_image)
     #print(numpydata.shape)
     pics_13x13.append(numpydata)
@@ -39,15 +42,15 @@ for filename in os.listdir('./pictures/13x13'):
 for filename in os.listdir('./pictures/9x9'):
     my_image = Image.open('./pictures/9x9/'+filename)
     my_image = my_image.convert('1') 
-    my_image = my_image.resize((25,25))
+    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
     numpydata = asarray(my_image)
     #print(type(numpydata))
     #print(numpydata.shape)
     pics_9x9.append(numpydata)
 
-nd_array_19x19 = np.zeros(shape=(len(pics_19x19), 25, 25))
-nd_array_13x13 = np.zeros(shape=(len(pics_13x13), 25, 25))
-nd_array_9x9 = np.zeros(shape=(len(pics_9x9), 25, 25))
+nd_array_19x19 = np.zeros(shape=(len(pics_19x19), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+nd_array_13x13 = np.zeros(shape=(len(pics_13x13), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+nd_array_9x9 = np.zeros(shape=(len(pics_9x9), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
 
 
 for counter in range(len(pics_19x19)):
@@ -114,8 +117,8 @@ x_test[0].show()
 
 #train_images, test_images = [], []
 
-train_images = np.zeros(shape=(len(x_train), 25, 25))
-test_images = np.zeros(shape=(len(x_test), 25, 25))
+train_images = np.zeros(shape=(len(x_train), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+test_images = np.zeros(shape=(len(x_test), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
 
 
 for counter in range(len(x_train)) :
@@ -174,7 +177,7 @@ print(train_labels)
 
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=(25, 25)),
+    tf.keras.layers.Flatten(input_shape=(int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size']))),
     tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(10)
 ])
@@ -184,7 +187,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels, epochs=int(config['NEURAL_NETWORK']['number_of_epochs']))
 
 
 
