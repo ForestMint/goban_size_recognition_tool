@@ -67,6 +67,11 @@ for pic_9x9 in pics_9x9:
         x_test.append(pic_9x9)
         y_test.append("9x9")
 
+
+
+print(y_train)
+print(y_test)
+
 '''
 ## let's display some images
 x_train[0].show()
