@@ -9,7 +9,10 @@ import keras
 import tensorflow as tf
 import numpy as np
 from numpy import asarray
+import matplotlib.pyplot as plt
 
+
+labels_dict = {"19x19": 1, "13x13": 2, "9x9" : 3}
 
 ## declare lists to contain images
 pics_19x19 = []
@@ -135,10 +138,32 @@ x = keras.utils.img_to_array(x_test[0])
 print(x)
 '''
 
+'''
+train_images = train_images / 255.0
+
+test_images = test_images / 255.0
+'''
+
+train_images = np.array(train_images)
+train_labels = np.array(train_labels)
+
+for counter in range(len(train_labels)):
+    train_labels[counter] = labels_dict[train_labels[counter]]
+#train_labels = list(map(int, train_labels))
+train_labels = train_labels.astype(int)
+
 print(train_images.shape)
-print(test_images.shape)
+print(len(train_labels))
+
+print(type(train_images))
+print(type(train_labels))
+
+print(train_images)
+print(train_labels)
 
 
+
+#plt.imshow(train_images[0])
 
 
 model = tf.keras.Sequential([
@@ -151,10 +176,10 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-'''
+
 model.fit(train_images, train_labels, epochs=4)
 
-
+'''
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 print('\nTest accuracy:', test_acc)
