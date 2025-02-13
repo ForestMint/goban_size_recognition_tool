@@ -9,6 +9,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 from PIL import Image
 from random import randint
 import keras
+import tensorflow as tf
 
 print('Hello World!')
 
@@ -21,17 +22,17 @@ pics_9x9 = []
 ## fill the lists with images from the folders
 for filename in os.listdir('./pictures/19x19'):
     my_image = Image.open('./pictures/19x19/'+filename)
-    my_image = my_image.resize((200,200))
+    my_image = my_image.resize((25,25))
     pics_19x19.append(my_image)
 
 for filename in os.listdir('./pictures/13x13'):
     my_image = Image.open('./pictures/13x13/'+filename)
-    my_image = my_image.resize((200,200))
+    my_image = my_image.resize((25,25))
     pics_13x13.append(my_image)
 
 for filename in os.listdir('./pictures/9x9'):
     my_image = Image.open('./pictures/9x9/'+filename)
-    my_image = my_image.resize((200,200))
+    my_image = my_image.resize((25,25))
     pics_9x9.append(my_image)
 
 ## create empty train and test sets
@@ -68,9 +69,10 @@ for pic_9x9 in pics_9x9:
         y_test.append("9x9")
 
 
-
+'''
 print(y_train)
 print(y_test)
+'''
 
 '''
 ## let's display some images
@@ -78,14 +80,42 @@ x_train[0].show()
 x_test[0].show()
 '''
 
+train_images, test_images = [], []
+for image in x_train :
+    train_images.append(keras.utils.img_to_array(x_train[0]))
+for image in x_test :
+    test_images.append(keras.utils.img_to_array(x_test[0]))
 
 
+train_labels, test_labels = y_train, y_test
+'''
 x = keras.utils.img_to_array(x_test[0])
+print(x)
+'''
+
+train_images.shape
 
 
+model = tf.keras.Sequential([
+    tf.keras.layers.Flatten(input_shape=(25, 25)),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(10)
+])
+
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
 
 '''
-print(pics_19x19)
-print(pics_13x13)
-print(pics_9x9)
+model.fit(train_images, train_labels, epochs=4)
+
+
+
+test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+print('\nTest accuracy:', test_acc)
+
+## make predictions
+probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+predictions = probability_model.predict(test_images)
+#predictions[0]
 '''
