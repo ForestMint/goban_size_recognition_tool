@@ -107,10 +107,11 @@ print('\nTest accuracy:', test_acc)
 
 
 
-'''
+
 
 ## make predictions
 probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
 predictions = probability_model.predict(test_images)
-#predictions[0]
-'''
+print(predictions[0])
+print(predictions)
+
