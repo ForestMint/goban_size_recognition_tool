@@ -14,152 +14,73 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
 
-labels_dict = {"19x19": 1, "13x13": 2, "9x9" : 3}
+## ------------------- MANAGE NP.ARRAYS BASED ON FOLDERS ---------------
 
-## declare lists to contain images
-pics_19x19 = []
-pics_13x13 = []
-pics_9x9 = []
+# Get the list of all files and directories 
+path = "./pictures"
+dir_list = os.listdir(path) 
 
-## fill the lists with images from the folders
-for filename in os.listdir('./pictures/19x19'):
-    my_image = Image.open('./pictures/19x19/'+filename)
-    my_image = my_image.convert('1') 
-    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
-    numpydata = asarray(my_image)
-    #print(numpydata.shape)
-    pics_19x19.append(numpydata)
-
-for filename in os.listdir('./pictures/13x13'):
-    my_image = Image.open('./pictures/13x13/'+filename)
-    my_image = my_image.convert('1') 
-    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
-    numpydata = asarray(my_image)
-    #print(numpydata.shape)
-    pics_13x13.append(numpydata)
-
-for filename in os.listdir('./pictures/9x9'):
-    my_image = Image.open('./pictures/9x9/'+filename)
-    my_image = my_image.convert('1') 
-    my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
-    numpydata = asarray(my_image)
-    #print(type(numpydata))
-    #print(numpydata.shape)
-    pics_9x9.append(numpydata)
-
-nd_array_19x19 = np.zeros(shape=(len(pics_19x19), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
-nd_array_13x13 = np.zeros(shape=(len(pics_13x13), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
-nd_array_9x9 = np.zeros(shape=(len(pics_9x9), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+nb_of_pictures = 0
+for dir in dir_list:
+    nb_of_pictures += len(os.listdir("./pictures/" + dir))
 
 
-for counter in range(len(pics_19x19)):
-    nd_array_19x19[counter] = pics_19x19[counter]
+labels_dict = {}
 
-for counter in range(len(pics_13x13)):
-    nd_array_13x13[counter] = pics_13x13[counter]
+data_set = np.zeros(shape=(nb_of_pictures, int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+label_set = np.zeros(shape=(nb_of_pictures))
 
-for counter in range(len(pics_9x9)):
-    nd_array_9x9[counter] = pics_9x9[counter]
+counter = 0
+item_counter = 0
+for dir in dir_list:
+    counter += 1
+    labels_dict[dir] = counter
 
+    for filename in os.listdir("./pictures/" + dir):
 
-
-
-## create empty train and test sets
-x_train, y_train, x_test, y_test = [],[],[],[]
-
-
-## for every image in each of the 3 lists, it will be sorted randomly to either
-## the train set or the test set
-for pic_19x19 in nd_array_19x19:
-    res=randint(0,100)
-    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
-        x_train.append(pic_19x19)
-        y_train.append("19x19")
-    else:
-        x_test.append(pic_19x19)
-        y_test.append("19x19")
-
-for pic_13x13 in nd_array_13x13:
-    res=randint(0,100)
-    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
-        x_train.append(pic_13x13)
-        y_train.append("13x13")
-    else:
-        x_test.append(pic_13x13)
-        y_test.append("13x13")
-
-for pic_9x9 in nd_array_9x9:
-    res=randint(0,100)
-    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
-        x_train.append(pic_9x9)
-        y_train.append("9x9")
-    else:
-        x_test.append(pic_9x9)
-        y_test.append("9x9")
+        my_image = Image.open("./pictures/" + dir + "/" +filename)
+        my_image = my_image.convert('1') 
+        my_image = my_image.resize((int(config['IMAGE_PROCESSING']['image_size']),int(config['IMAGE_PROCESSING']['image_size'])))
+        numpydata = asarray(my_image)
+        #print(numpydata.shape)
+        data_set[item_counter] = numpydata
+        label_set[item_counter] = counter
+        item_counter += 1
 
 
+# shuffle data set and label set with the same order
+data_set, label_set = unison_shuffled_copies(data_set, label_set)
 
+limit = round(len(data_set)*int(config['TRAINING_RULES']['percentage_of_pictures_in_the_training_set'])/100)
 
+train_images = data_set[:limit]
+train_labels = label_set[:limit]
 
-#train_images, test_images = [], []
+test_images = data_set[limit:]
+test_labels = label_set[limit:]
 
-train_images = np.zeros(shape=(len(x_train), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
-test_images = np.zeros(shape=(len(x_test), int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size'])))
+print("data_set.shape : ")
+print(data_set.shape)
 
-
-for counter in range(len(x_train)) :
-    #train_images.append(keras.utils.img_to_array(x_train[0]))
-    train_images [counter] = (x_train[counter])
-for counter in range(len(x_test)) :
-    #test_images.append(keras.utils.img_to_array(x_test[0]))
-    train_images [counter] = (x_test[counter])
-
-
-
-train_labels, test_labels = y_train, y_test
-
-
-#train_images, test_images = np.array(train_images), np.array(test_images)
-
-
-'''
-x = keras.utils.img_to_array(x_test[0])
-print(x)
-'''
-
-'''
-train_images = train_images / 255.0
-
-test_images = test_images / 255.0
-'''
-
-train_images = np.array(train_images)
-train_labels = np.array(train_labels)
-test_labels = np.array(test_labels)
-
-
-for counter in range(len(train_labels)):
-    train_labels[counter] = labels_dict[train_labels[counter]]
-#train_labels = list(map(int, train_labels))
-train_labels = train_labels.astype(int)
-
-for counter in range(len(test_labels)):
-    test_labels[counter] = labels_dict[test_labels[counter]]
-#train_labels = list(map(int, train_labels))
-test_labels = test_labels.astype(int)
-
-'''
+print("train_images.shape : ")
 print(train_images.shape)
-print(len(train_labels))
 
-print(type(train_images))
-print(type(train_labels))
+print("test_images.shape : ")
+print(test_images.shape)
 
-print(train_images)
-print(train_labels)
+print("labels_set.shape : ")
+print(label_set.shape)
 
-'''
+print("train_labels.shape : ")
+print(train_labels.shape)
+
+print("test_labels.shape : ")
+print(test_labels.shape)
 
 
 
@@ -183,6 +104,8 @@ model.fit(train_images, train_labels, epochs=int(config['NEURAL_NETWORK']['numbe
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 print('\nTest accuracy:', test_acc)
+
+
 
 '''
 
