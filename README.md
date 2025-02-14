@@ -9,3 +9,6 @@ $ source .venv/bin/activate
 $ pip install keras
 $ pip install tensorflow
 $ pip intall Pillow
+
+# run script
+$ python3 my_script.py

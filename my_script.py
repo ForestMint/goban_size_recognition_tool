@@ -73,7 +73,7 @@ x_train, y_train, x_test, y_test = [],[],[],[]
 ## the train set or the test set
 for pic_19x19 in nd_array_19x19:
     res=randint(0,100)
-    if res<80:
+    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
         x_train.append(pic_19x19)
         y_train.append("19x19")
     else:
@@ -82,7 +82,7 @@ for pic_19x19 in nd_array_19x19:
 
 for pic_13x13 in nd_array_13x13:
     res=randint(0,100)
-    if res<80:
+    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
         x_train.append(pic_13x13)
         y_train.append("13x13")
     else:
@@ -91,7 +91,7 @@ for pic_13x13 in nd_array_13x13:
 
 for pic_9x9 in nd_array_9x9:
     res=randint(0,100)
-    if res<80:
+    if res<int(config['TRAINING_RULES']['targeted_percentage_of_pictures_in_the_training_set']):
         x_train.append(pic_9x9)
         y_train.append("9x9")
     else:
@@ -149,6 +149,7 @@ for counter in range(len(test_labels)):
 #train_labels = list(map(int, train_labels))
 test_labels = test_labels.astype(int)
 
+'''
 print(train_images.shape)
 print(len(train_labels))
 
@@ -157,6 +158,8 @@ print(type(train_labels))
 
 print(train_images)
 print(train_labels)
+
+'''
 
 
 
