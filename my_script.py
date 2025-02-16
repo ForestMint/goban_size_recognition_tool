@@ -14,13 +14,7 @@ import matplotlib.pyplot as plt
 import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
-
-## ------------------- DECLARE FUNCTIONS -------------------------------
-
-def unison_shuffled_copies(a, b):
-    assert len(a) == len(b)
-    p = np.random.permutation(len(a))
-    return a[p], b[p]
+from functions import unison_shuffled_copies
 
 ## ------------------- MANAGE NP.ARRAYS BASED ON FOLDERS ---------------
 
