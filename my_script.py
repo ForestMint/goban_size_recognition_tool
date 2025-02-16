@@ -90,7 +90,8 @@ test_loss, test_acc = goban_size_recognition_model.evaluate(test_images,  test_l
 print('\nTest accuracy:', test_acc)
 
 ## make predictions
-#probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-predictions = goban_size_recognition_model.predict(test_images)
+probability_model = tf.keras.Sequential([goban_size_recognition_model, 
+                                         tf.keras.layers.Softmax()])
+predictions = probability_model.predict(test_images)
 print(predictions[0])
 #print(predictions.shape)
