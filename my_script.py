@@ -39,7 +39,7 @@ counter = 0
 item_counter = 0
 for dir in dir_list:
     counter += 1
-    labels_dict[dir] = counter
+    labels_dict[dir] = counter-1
 
     for filename in os.listdir("./pictures/" + dir):
 
@@ -49,7 +49,7 @@ for dir in dir_list:
         numpydata = asarray(my_image)
         #print(numpydata.shape)
         data_set[item_counter] = numpydata
-        label_set[item_counter] = counter
+        label_set[item_counter] = counter-1
         item_counter += 1
 
 
@@ -82,27 +82,34 @@ print(train_labels.shape)
 print("test_labels.shape : ")
 print(test_labels.shape)
 
-
+#train_labels = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+print(train_labels)
 
 #plt.imshow(train_images[0])
 
-
-model = tf.keras.Sequential([
+# Define Sequential model with 3 layers
+goban_size_recognition_model = tf.keras.Sequential([
     tf.keras.layers.Flatten(input_shape=(int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size']))),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10)
+    tf.keras.layers.Dense(3)
 ])
 
-model.compile(optimizer='adam',
+#goban_size_recognition_model.add(Dense(3, activation='softmax'))
+
+
+goban_size_recognition_model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
 
-model.fit(train_images, train_labels, epochs=int(config['NEURAL_NETWORK']['number_of_epochs']))
+#goban_size_recognition_model.compile(optimizer="adam", loss="mean_squared_error")
+
+
+goban_size_recognition_model.fit(train_images, train_labels, epochs=int(config['NEURAL_NETWORK']['number_of_epochs']))
 
 
 
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+test_loss, test_acc = goban_size_recognition_model.evaluate(test_images,  test_labels, verbose=2)
 print('\nTest accuracy:', test_acc)
 
 
@@ -110,8 +117,9 @@ print('\nTest accuracy:', test_acc)
 
 
 ## make predictions
-probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-predictions = probability_model.predict(test_images)
-print(predictions[0])
+#probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+predictions = goban_size_recognition_model.predict(test_images)
+#print(predictions[0])
+print(predictions.shape)
 print(predictions)
 
