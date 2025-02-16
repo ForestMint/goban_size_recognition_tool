@@ -75,7 +75,7 @@ goban_size_recognition_model = tf.keras.Sequential([
     # hidden layer
     tf.keras.layers.Dense(128, activation='relu'),
     # output layer
-    tf.keras.layers.Dense(3)
+    tf.keras.layers.Dense(len(np.unique(train_labels, return_counts=True)[0]))
 ])
 
 goban_size_recognition_model.compile(optimizer='adam',
