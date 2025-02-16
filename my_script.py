@@ -1,5 +1,6 @@
 
 ## ------------------- IMPORT PACKAGES ----------------------------------------
+
 import os
 # this command makes that the Tensorlow warning is not written in console
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
@@ -13,6 +14,8 @@ import matplotlib.pyplot as plt
 import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+## ------------------- DECLARE FUNCTIONS -------------------------------
 
 def unison_shuffled_copies(a, b):
     assert len(a) == len(b)
@@ -28,7 +31,6 @@ dir_list = os.listdir(path)
 nb_of_pictures = 0
 for dir in dir_list:
     nb_of_pictures += len(os.listdir("./pictures/" + dir))
-
 
 labels_dict = {}
 
@@ -64,62 +66,31 @@ train_labels = label_set[:limit]
 test_images = data_set[limit:]
 test_labels = label_set[limit:]
 
-print("data_set.shape : ")
-print(data_set.shape)
-
-print("train_images.shape : ")
-print(train_images.shape)
-
-print("test_images.shape : ")
-print(test_images.shape)
-
-print("labels_set.shape : ")
-print(label_set.shape)
-
-print("train_labels.shape : ")
-print(train_labels.shape)
-
-print("test_labels.shape : ")
-print(test_labels.shape)
-
-#train_labels = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-print(train_labels)
-
-#plt.imshow(train_images[0])
+## ------------------- DEFINE, COMPILE AND FIT MODEL ---------------
 
 # Define Sequential model with 3 layers
 goban_size_recognition_model = tf.keras.Sequential([
+    # input layer
     tf.keras.layers.Flatten(input_shape=(int(config['IMAGE_PROCESSING']['image_size']), int(config['IMAGE_PROCESSING']['image_size']))),
+    # hidden layer
     tf.keras.layers.Dense(128, activation='relu'),
+    # output layer
     tf.keras.layers.Dense(3)
 ])
-
-#goban_size_recognition_model.add(Dense(3, activation='softmax'))
-
 
 goban_size_recognition_model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-
-#goban_size_recognition_model.compile(optimizer="adam", loss="mean_squared_error")
-
-
 goban_size_recognition_model.fit(train_images, train_labels, epochs=int(config['NEURAL_NETWORK']['number_of_epochs']))
 
-
+## ------------------- MEASURE THE ACCURACY OF THE MODEL ---------------
 
 test_loss, test_acc = goban_size_recognition_model.evaluate(test_images,  test_labels, verbose=2)
 print('\nTest accuracy:', test_acc)
 
-
-
-
-
 ## make predictions
 #probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
 predictions = goban_size_recognition_model.predict(test_images)
-#print(predictions[0])
-print(predictions.shape)
-print(predictions)
-
+print(predictions[0])
+#print(predictions.shape)
