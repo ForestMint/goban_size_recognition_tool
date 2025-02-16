@@ -89,3 +89,8 @@ probability_model = tf.keras.Sequential([goban_size_recognition_model,
 predictions = probability_model.predict(test_images)
 print(predictions[0])
 #print(predictions.shape)
+
+## ------------------- SAVE THE MODEL ---------------
+
+goban_size_recognition_model.save('./goban_size_recognition_model.keras')  # The file needs to end with the .keras extension
+# the model could be loaded back with " model = keras.models.load_model('./goban_size_recognition_model.keras') "
