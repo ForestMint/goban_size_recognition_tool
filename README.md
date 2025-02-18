@@ -12,3 +12,6 @@ $ pip intall Pillow
 
 # run script
 $ python3 my_script.py
+
+# run script in Linux system
+$ ./launch.sh
