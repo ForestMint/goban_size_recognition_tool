@@ -5,9 +5,14 @@ import os
 # this command makes that the Tensorlow warning is not written in console
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 from PIL import Image
+#from pillow import Image
+
 from random import randint
-import keras
+
+#import keras
+
 import tensorflow as tf
+
 import numpy as np
 from numpy import asarray
 import matplotlib.pyplot as plt
@@ -15,6 +20,8 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 from functions import unison_shuffled_copies
+
+
 
 ## ------------------- MANAGE NP.ARRAYS BASED ON FOLDERS ---------------
 
@@ -60,6 +67,8 @@ train_labels = label_set[:limit]
 test_images = data_set[limit:]
 test_labels = label_set[limit:]
 
+
+
 ## ------------------- DEFINE, COMPILE AND FIT MODEL ---------------
 
 # Define Sequential model with 3 layers
@@ -94,3 +103,4 @@ print(predictions[0])
 
 goban_size_recognition_model.save('./goban_size_recognition_model.keras')  # The file needs to end with the .keras extension
 # the model could be loaded back with " model = keras.models.load_model('./goban_size_recognition_model.keras') "
+

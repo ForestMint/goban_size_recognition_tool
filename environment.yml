@@ -8,7 +8,13 @@ channels :
   - yuxiang
   - conda-forge
   - bioconda
-dependencies :
-- pip :
-  - keras==3.8.0
-  - pil==1.1.6
+dependencies:
+  - python==3.11
+  - pip :
+    - keras==3.8.0
+  #  - pil==1.1.6
+    - pillow==11.1.0
+    - tensorflow==2.17.0
+    - keras==3.8.0
+    - numpy==1.23.5
+    - matplotlib==3.9.4
