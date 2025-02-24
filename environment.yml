@@ -9,7 +9,7 @@ channels :
   - conda-forge
   - bioconda
 dependencies:
-  - python==3.11
+  - python==3.11.0
   - pip :
     - keras==3.8.0
   #  - pil==1.1.6
